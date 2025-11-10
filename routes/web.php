@@ -87,3 +87,4 @@ Route::prefix('admin')->name('pages.admin.')->group(function () {
     Route::delete('warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
 });
 
+
