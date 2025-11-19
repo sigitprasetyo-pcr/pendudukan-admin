@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+// Ditambahkan untuk logging yang lebih baik
 
 class UserController extends Controller
 {
@@ -31,22 +32,23 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|min:3',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ]);
-        //Hash make unkb enskripsi password
+
         try {
             User::create([
-                'name' => $request->name,
-                'email' => $request->email,
+                'name'     => $request->name,
+                'email'    => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-            //Redireck dan sukses
-            return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+
+            return redirect()->route('user.index')->with('success', '✅ User berhasil ditambahkan!');
         } catch (\Exception $e) {
-            //Eroro
-            return redirect()->back()->withInput()->with('error', '❌ Terjadi kesalahan: ' . $e->getMessage());
+            // [PERBAIKAN]: Logging error yang lebih baik
+            Log::error('Gagal membuat user baru: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', '❌ Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
         }
     }
 
@@ -65,8 +67,9 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'name'     => 'required|min:3',
+            // Pengecualian ID saat update
+            'email'    => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:6|confirmed',
         ]);
 
@@ -74,7 +77,7 @@ class UserController extends Controller
 
         try {
             $data = [
-                'name' => $request->name,
+                'name'  => $request->name,
                 'email' => $request->email,
             ];
 
@@ -84,9 +87,11 @@ class UserController extends Controller
             }
 
             $user->update($data);
-            return redirect()->route('user.index')->with('success',);
+            // [PERBAIKAN]: Menambahkan pesan sukses yang lengkap
+            return redirect()->route('user.index')->with('success', '✅ User berhasil diperbarui!');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', '❌ Terjadi kesalahan: ' . $e->getMessage());
+            Log::error("Gagal memperbarui user ID {$id}: " . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', '❌ Terjadi kesalahan saat memperbarui data: ' . $e->getMessage());
         }
     }
 
@@ -99,12 +104,10 @@ class UserController extends Controller
             User::findOrFail($id)->delete();
             return redirect()->route('user.index')->with('success', '✅ User berhasil dihapus!');
         } catch (\Exception $e) {
+            Log::error("Gagal menghapus user ID {$id}: " . $e->getMessage());
             return redirect()->route('user.index')->with('error', '❌ Gagal menghapus user: ' . $e->getMessage());
         }
     }
 
-    public function login () {
-
-
-    }
+    // [PERBAIKAN]: Fungsi login dihapus karena sudah ada di LoginController
 }

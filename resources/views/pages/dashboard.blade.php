@@ -178,6 +178,9 @@
       </div>
     </div>
   </div>
+</div> {{-- penutup card KK Terbaru --}}
+
+
 
 </div>
 @endsection

@@ -68,7 +68,7 @@
             </div>
 
             <div class="card-footer">
-                {{ $kk->links() }}
+                {{-- {{ $kk->links() }} --}}
             </div>
         </div>
     </div>
