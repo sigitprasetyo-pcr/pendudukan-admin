@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -55,7 +56,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors(['password' => 'Email atau password salah.'])
-            ->withInput();
+                     ->withInput();
     }
 
     /**
@@ -69,7 +70,7 @@ class LoginController extends Controller
             'password' => [
                 'required',
                 'confirmed',
-                Password::min(6)->letters()->mixedCase()->numbers(),
+                Password::min(6)->letters()->mixedCase()->numbers()
             ],
         ], [
             'name.required'      => 'Nama wajib diisi',
@@ -89,6 +90,7 @@ class LoginController extends Controller
             ->with('success', 'Registrasi berhasil. Silakan login.');
     }
 
+
     /**
      * Logout
      */
@@ -98,7 +100,7 @@ class LoginController extends Controller
         $request->session()->forget([
             'user_id',
             'user_name',
-            'user_email',
+            'user_email'
         ]);
 
         // atau flush semua session
