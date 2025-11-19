@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KeluargaKkController;
+use App\Http\Controllers\KeluargaKKController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeristiwaKelahiranController;
 use App\Http\Controllers\UserController;
@@ -51,7 +51,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 */
 Route::resource('user', UserController::class);
 Route::resource('warga', WargaController::class);
-Route::resource('keluarga-kk', KeluargaKkController::class);
+Route::resource('keluarga-kk', KeluargaKKController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +69,7 @@ Route::prefix('admin')->name('pages.admin.')->group(function () {
     Route::put('warga/{id}', [WargaController::class, 'update'])->name('warga.update');
     Route::delete('warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
 
-    Route::resource('keluarga-kk', KeluargaKkController::class)->names('keluarga_kk');
+    Route::resource('keluarga-kk', KeluargaKKController::class)->names('keluarga_kk');
 
         // --- ANGGOTA KELUARGA (TAMBAHKAN) ---
     Route::resource('anggota_keluarga', AnggotaKeluargaController::class);
