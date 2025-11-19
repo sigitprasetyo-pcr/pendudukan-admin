@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $rt = $request->query('rt');
         $rw = $request->query('rw');
 
-        $kkQuery = KeluargaKk::query()
+        $kkQuery = KeluargaKK::query()
             ->when($rt, fn ($q) => $q->where('rt', $rt))
             ->when($rw, fn ($q) => $q->where('rw', $rw));
 
