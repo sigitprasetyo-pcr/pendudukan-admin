@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Warga;
-use App\Models\KeluargaKk;
+use App\Models\KeluargaKK;
 use App\Models\AnggotaKeluarga;
 use App\Models\PeristiwaKelahiran;
 use Illuminate\Http\Request;
