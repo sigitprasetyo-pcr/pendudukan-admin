@@ -11,14 +11,17 @@ class LoginController extends Controller
     /**
      * halaman login
      */
-    public function index()
+       public function index()
     {
-        return view('pages.admin.Auth.login');
+        return view('pages.auth.login');
     }
 
+    /**
+     * halaman register
+     */
     public function registerForm()
     {
-        return view('pages.admin.Auth.register');
+        return view('pages.auth.register');
     }
 
     /**
