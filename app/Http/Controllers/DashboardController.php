@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Warga;
-use App\Models\KeluargaKk;
+use App\Models\KeluargaKK;
+use App\Models\AnggotaKeluarga;
+use App\Models\PeristiwaKelahiran;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -21,7 +23,7 @@ class DashboardController extends Controller
         $rt = $request->query('rt');
         $rw = $request->query('rw');
 
-        $kkQuery = KeluargaKk::query()
+        $kkQuery = KeluargaKK::query()
             ->when($rt, fn ($q) => $q->where('rt', $rt))
             ->when($rw, fn ($q) => $q->where('rw', $rw));
 
@@ -31,6 +33,28 @@ class DashboardController extends Controller
         $totalRW    = (clone $kkQuery)->distinct('rw')->count('rw');
         $totalWarga = Warga::count();
         $totalUser  = User::count();
+
+        // =============================
+        // === TAMBAHAN DATA BARU  ====
+        // =============================
+
+        // Total anggota keluarga
+        $totalAnggota = AnggotaKeluarga::count();
+
+        // Total peristiwa kelahiran
+        $totalKelahiran = PeristiwaKelahiran::count();
+
+        // Anggota terbaru (10 data)
+        $anggotaTerbaru = AnggotaKeluarga::with(['kk','warga'])
+            ->orderByDesc('anggota_id')
+            ->limit(10)
+            ->get();
+
+        // Kelahiran terbaru (10 data)
+        $kelahiranTerbaru = PeristiwaKelahiran::with(['bayi'])
+            ->orderByDesc('kelahiran_id')
+            ->limit(10)
+            ->get();
 
         // KK terbaru
         $kkTerbaru = (clone $kkQuery)
@@ -62,17 +86,23 @@ class DashboardController extends Controller
         ];
 
         return view('pages.dashboard', [
-            'filters'   => ['rt' => $rt, 'rw' => $rw],
-            'totalKK'   => $totalKK,
-            'totalRT'   => $totalRT,
-            'totalRW'   => $totalRW,
-            'totalWarga'=> $totalWarga,
-            'totalUser' => $totalUser,
-            'kkTerbaru' => $kkTerbaru,
-            'byRw'      => $byRw,
-            'byRt'      => $byRt,
-            'chartRw'   => $chartRw,
-            'chartRt'   => $chartRt,
+            'filters'           => ['rt' => $rt, 'rw' => $rw],
+            'totalKK'           => $totalKK,
+            'totalRT'           => $totalRT,
+            'totalRW'           => $totalRW,
+            'totalWarga'        => $totalWarga,
+            'totalUser'         => $totalUser,
+            'kkTerbaru'         => $kkTerbaru,
+            'byRw'              => $byRw,
+            'byRt'              => $byRt,
+            'chartRw'           => $chartRw,
+            'chartRt'           => $chartRt,
+
+            // === DATA BARU YANG PENTING UNTUK DASHBOARD ===
+            'totalAnggota'      => $totalAnggota,
+            'totalKelahiran'    => $totalKelahiran,
+            'anggotaTerbaru'    => $anggotaTerbaru,
+            'kelahiranTerbaru'  => $kelahiranTerbaru,
         ]);
     }
 }

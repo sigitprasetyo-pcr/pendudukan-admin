@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KeluargaKK;
 use Illuminate\Http\Request;
 
-class KeluargaKkController extends Controller
+class KeluargaKKController extends Controller
 {
     /**
      * Tampilkan semua data KK

@@ -12,7 +12,7 @@ class LoginController extends Controller
     /**
      * halaman login
      */
-    public function index()
+       public function index()
     {
         return view('pages.auth.login');
     }

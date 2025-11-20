@@ -1,7 +1,9 @@
 <?php
+use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KeluargaKkController;
+use App\Http\Controllers\KeluargaKKController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PeristiwaKelahiranController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use Illuminate\Support\Facades\Route;
@@ -44,47 +46,35 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 /*
 |--------------------------------------------------------------------------
-| Resource admin
+| Resource admin (Non-admin prefix) - Dibiarkan sesuai kode awal Anda
 |--------------------------------------------------------------------------
 */
 Route::resource('user', UserController::class);
-
 Route::resource('warga', WargaController::class);
-//keluarga kk
-Route::resource('keluarga-kk', KeluargaKkController::class);
+Route::resource('keluarga-kk', KeluargaKKController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Resource admin (dengan prefix 'admin') - Semua rute disatukan di sini
+|--------------------------------------------------------------------------
+*/
 Route::prefix('admin')->name('pages.admin.')->group(function () {
-    // URL: /admin/keluarga-kk
-    // Name: pages.admin.keluarga_kk.*
-    Route::resource('keluarga-kk', KeluargaKKController::class)->names('keluarga_kk');
-});
 
-Route::prefix('admin')->name('pages.admin.')->group(function () {
-    Route::resource('keluarga-kk', KeluargaKKController::class)->names('keluarga_kk');
-});
-
-//warga
-Route::prefix('admin')->name('pages.admin.')->group(function () {
-    // Menampilkan semua warga
+    // Warga (Rute eksplisit Anda)
     Route::get('warga', [WargaController::class, 'index'])->name('warga.index');
-
-    // Menampilkan form tambah warga
     Route::get('warga/create', [WargaController::class, 'create'])->name('warga.create');
-
-    // Menyimpan data warga baru
     Route::post('warga', [WargaController::class, 'store'])->name('warga.store');
-
-    // Menampilkan detail warga
     Route::get('warga/{id}', [WargaController::class, 'show'])->name('warga.show');
-
-    // Menampilkan form edit warga
     Route::get('warga/{id}/edit', [WargaController::class, 'edit'])->name('warga.edit');
-
-    // Mengupdate data warga
     Route::put('warga/{id}', [WargaController::class, 'update'])->name('warga.update');
-
-    // Menghapus data warga
     Route::delete('warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
+
+    Route::resource('keluarga-kk', KeluargaKKController::class)->names('keluarga_kk');
+
+        // --- ANGGOTA KELUARGA (TAMBAHKAN) ---
+    Route::resource('anggota_keluarga', AnggotaKeluargaController::class);
+
+    // --- PERISTIWA KELAHIRAN (TAMBAHKAN) ---
+    Route::resource('peristiwa_kelahiran', PeristiwaKelahiranController::class);
+
 });
-
-

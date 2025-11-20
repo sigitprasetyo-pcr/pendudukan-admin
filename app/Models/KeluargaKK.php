@@ -1,13 +1,13 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class KeluargaKk extends Model
+class KeluargaKK extends Model
 {
-    protected $table      = 'keluarga_kk';
+    protected $table = 'keluarga_kk';
     protected $primaryKey = 'kk_id';
-    public $timestamps    = true;
 
     protected $fillable = [
         'kk_nomor',
@@ -17,10 +17,12 @@ class KeluargaKk extends Model
         'rw',
     ];
 
-    /**
-     * Relasi dengan Warga (kepala keluarga)
-     */
-    public function kepalaKeluarga()
+    public function anggota()
+    {
+        return $this->hasMany(AnggotaKeluarga::class, 'kk_id');
+    }
+
+    public function kepala()
     {
         return $this->belongsTo(Warga::class, 'kepala_keluarga_warga_id', 'warga_id');
     }
