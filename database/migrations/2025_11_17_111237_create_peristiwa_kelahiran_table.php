@@ -20,7 +20,7 @@ return new class extends Migration
 
             // FK Ayah
             $table->unsignedBigInteger('ayah_warga_id')->nullable(); // FK
-
+//testing
             // FK Ibu
             $table->unsignedBigInteger('ibu_warga_id')->nullable(); // FK
 
