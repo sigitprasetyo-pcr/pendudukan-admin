@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\KeluargaKK;
@@ -10,9 +9,17 @@ class KeluargaKKController extends Controller
     /**
      * Tampilkan semua data KK
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kk = KeluargaKK::latest()->paginate(10);
+        $filterableColumns = ['rt', 'rw'];
+        $searchableColumns = ['kk_nomor', 'alamat'];
+
+        $kk = KeluargaKK::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2)
+            ->withQueryString();
+
         return view('pages.admin.keluarga_kk.index', compact('kk'));
     }
 

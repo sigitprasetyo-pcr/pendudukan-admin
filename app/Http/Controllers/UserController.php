@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+
 // Ditambahkan untuk logging yang lebih baik
 
 class UserController extends Controller
@@ -12,9 +13,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['dataUser'] = User::latest()->get();
+        $filterableColumns = [];
+        $searchableColumns = ['name', 'email'];
+
+        $data['dataUser'] = User::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2)
+            ->withQueryString();
+
         return view('pages.admin.user.index', $data);
     }
 

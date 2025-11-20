@@ -1,19 +1,26 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\WargaController;
 use App\Models\Warga;
 use Illuminate\Http\Request;
-use App\Http\Controllers\WargaController;
 
 class WargaController extends Controller
 {
     /**
      * Tampilkan semua data warga
      */
-    public function index()
+    public function index(Request $request)
     {
-        $warga = Warga::latest()->paginate(10);
+        $filterableColumns = ['jenis_kelamin', 'agama'];
+        $searchableColumns = ['nama', 'no_ktp', 'pekerjaan', 'email'];
+
+        $warga = Warga::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2)
+            ->withQueryString();
+
         return view('pages.admin.warga.index', compact('warga'));
     }
 
@@ -31,13 +38,13 @@ class WargaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'no_ktp'       => 'required|string|max:20|unique:warga,no_ktp',
-            'nama'         => 'required|string|max:100',
-            'jenis_kelamin'=> 'required|in:Laki-Laki,Perempuan',
-            'agama'        => 'required|string|max:50',
-            'pekerjaan'    => 'nullable|string|max:100',
-            'telp'         => 'nullable|string|max:15',
-            'email'        => 'nullable|email|max:100'
+            'no_ktp'        => 'required|string|max:20|unique:warga,no_ktp',
+            'nama'          => 'required|string|max:100',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'agama'         => 'required|string|max:50',
+            'pekerjaan'     => 'nullable|string|max:100',
+            'telp'          => 'nullable|string|max:15',
+            'email'         => 'nullable|email|max:100',
         ]);
 
         Warga::create($validated);
@@ -71,13 +78,13 @@ class WargaController extends Controller
         $warga = Warga::findOrFail($id);
 
         $validated = $request->validate([
-            'no_ktp'       => 'required|string|max:20|unique:warga,no_ktp,' . $id . ',warga_id',
-            'nama'         => 'required|string|max:100',
-            'jenis_kelamin'=> 'required|in:Laki-Laki,Perempuan',
-            'agama'        => 'required|string|max:50',
-            'pekerjaan'    => 'nullable|string|max:100',
-            'telp'         => 'nullable|string|max:15',
-            'email'        => 'nullable|email|max:100'
+            'no_ktp'        => 'required|string|max:20|unique:warga,no_ktp,' . $id . ',warga_id',
+            'nama'          => 'required|string|max:100',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'agama'         => 'required|string|max:50',
+            'pekerjaan'     => 'nullable|string|max:100',
+            'telp'          => 'nullable|string|max:15',
+            'email'         => 'nullable|email|max:100',
         ]);
 
         $warga->update($validated);

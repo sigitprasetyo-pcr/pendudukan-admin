@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\PeristiwaKelahiran;
@@ -12,9 +11,18 @@ class PeristiwaKelahiranController extends Controller
     /**
      * Tampilkan semua peristiwa kelahiran
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kelahiran = PeristiwaKelahiran::with(['bayi', 'ayah', 'ibu'])->latest()->paginate(10);
+        $filterableColumns = ['tgl_lahir'];
+        $searchableColumns = ['no_akta', 'tempat_lahir'];
+
+        $kelahiran = PeristiwaKelahiran::with(['bayi', 'ayah', 'ibu'])
+            ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2)
+            ->withQueryString();
+
         return view('pages.admin.peristiwa_kelahiran.index', compact('kelahiran'));
     }
 
@@ -33,13 +41,13 @@ class PeristiwaKelahiranController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'warga_id'       => 'required|exists:warga,warga_id',
-            'tgl_lahir'      => 'required|date',
-            'tempat_lahir'   => 'required|string|max:100',
-            'ayah_warga_id'  => 'required|exists:warga,warga_id',
-            'ibu_warga_id'   => 'required|exists:warga,warga_id',
-            'no_akta'        => 'required|string|max:50|unique:peristiwa_kelahiran,no_akta',
-            'bukti_kelahiran'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'warga_id'        => 'required|exists:warga,warga_id',
+            'tgl_lahir'       => 'required|date',
+            'tempat_lahir'    => 'required|string|max:100',
+            'ayah_warga_id'   => 'required|exists:warga,warga_id',
+            'ibu_warga_id'    => 'required|exists:warga,warga_id',
+            'no_akta'         => 'required|string|max:50|unique:peristiwa_kelahiran,no_akta',
+            'bukti_kelahiran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($request->hasFile('bukti_kelahiran')) {
@@ -68,7 +76,7 @@ class PeristiwaKelahiranController extends Controller
     public function edit($id)
     {
         $kelahiran = PeristiwaKelahiran::findOrFail($id);
-        $warga = Warga::all();
+        $warga     = Warga::all();
 
         return view('pages.admin.peristiwa_kelahiran.edit', compact('kelahiran', 'warga'));
     }
@@ -81,13 +89,13 @@ class PeristiwaKelahiranController extends Controller
         $kelahiran = PeristiwaKelahiran::findOrFail($id);
 
         $validated = $request->validate([
-            'warga_id'       => 'required|exists:warga,warga_id',
-            'tgl_lahir'      => 'required|date',
-            'tempat_lahir'   => 'required|string|max:100',
-            'ayah_warga_id'  => 'required|exists:warga,warga_id',
-            'ibu_warga_id'   => 'required|exists:warga,warga_id',
-            'no_akta'        => 'required|string|max:50|unique:peristiwa_kelahiran,no_akta,' . $id . ',kelahiran_id',
-            'bukti_kelahiran'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'warga_id'        => 'required|exists:warga,warga_id',
+            'tgl_lahir'       => 'required|date',
+            'tempat_lahir'    => 'required|string|max:100',
+            'ayah_warga_id'   => 'required|exists:warga,warga_id',
+            'ibu_warga_id'    => 'required|exists:warga,warga_id',
+            'no_akta'         => 'required|string|max:50|unique:peristiwa_kelahiran,no_akta,' . $id . ',kelahiran_id',
+            'bukti_kelahiran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($request->hasFile('bukti_kelahiran')) {

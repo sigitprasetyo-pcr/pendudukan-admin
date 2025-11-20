@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\AnggotaKeluarga;
@@ -12,9 +11,18 @@ class AnggotaKeluargaController extends Controller
     /**
      * Tampilkan data anggota keluarga
      */
-    public function index()
+    public function index(Request $request)
     {
-        $anggota = AnggotaKeluarga::with(['kk', 'warga'])->latest()->paginate(10);
+        $filterableColumns = ['kk_id', 'warga_id', 'hubungan'];
+        $searchableColumns = ['hubungan'];
+
+        $anggota = AnggotaKeluarga::with(['kk', 'warga'])
+            ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2)
+            ->withQueryString();
+
         return view('pages.admin.anggota_keluarga.index', compact('anggota'));
     }
 
@@ -23,7 +31,7 @@ class AnggotaKeluargaController extends Controller
      */
     public function create()
     {
-        $kk = KeluargaKK::all();
+        $kk    = KeluargaKK::all();
         $warga = Warga::all();
         return view('pages.admin.anggota_keluarga.create', compact('kk', 'warga'));
     }
@@ -34,9 +42,9 @@ class AnggotaKeluargaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kk_id'     => 'required|exists:keluarga_kk,kk_id',
-            'warga_id'  => 'required|exists:warga,warga_id',
-            'hubungan'  => 'required|string|max:50',
+            'kk_id'    => 'required|exists:keluarga_kk,kk_id',
+            'warga_id' => 'required|exists:warga,warga_id',
+            'hubungan' => 'required|string|max:50',
         ]);
 
         AnggotaKeluarga::create($validated);
@@ -60,8 +68,8 @@ class AnggotaKeluargaController extends Controller
     public function edit($id)
     {
         $anggota = AnggotaKeluarga::findOrFail($id);
-        $kk = KeluargaKK::all();
-        $warga = Warga::all();
+        $kk      = KeluargaKK::all();
+        $warga   = Warga::all();
 
         return view('pages.admin.anggota_keluarga.edit', compact('anggota', 'kk', 'warga'));
     }
@@ -74,9 +82,9 @@ class AnggotaKeluargaController extends Controller
         $anggota = AnggotaKeluarga::findOrFail($id);
 
         $validated = $request->validate([
-            'kk_id'     => 'required|exists:keluarga_kk,kk_id',
-            'warga_id'  => 'required|exists:warga,warga_id',
-            'hubungan'  => 'required|string|max:50',
+            'kk_id'    => 'required|exists:keluarga_kk,kk_id',
+            'warga_id' => 'required|exists:warga,warga_id',
+            'hubungan' => 'required|string|max:50',
         ]);
 
         $anggota->update($validated);

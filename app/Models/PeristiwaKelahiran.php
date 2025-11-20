@@ -7,6 +7,7 @@ namespace App\Models;
 // [PERBAIKAN 2]: Import Model Warga untuk definisi relasi
 use App\Models\Warga;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class PeristiwaKelahiran extends Model
 {
@@ -46,5 +47,26 @@ class PeristiwaKelahiran extends Model
     public function ibu()
     {
         return $this->belongsTo(Warga::class, 'ibu_warga_id', 'warga_id');
+    }
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
+    }
+
+    public function scopeSearch(Builder $query, $request, array $columns): Builder
+    {
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request, $columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
+                }
+            });
+        }
+        return $query;
     }
 }
