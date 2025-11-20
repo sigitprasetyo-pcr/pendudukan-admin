@@ -15,7 +15,7 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['Laki-Laki','Perempuan']);
             $table->string('agama', 50);
             $table->string('pekerjaan', 100)->nullable();
-            $table->string('telp', 15)->nullable();
+            $table->string('telp', 25)->nullable();
             $table->string('email', 100)->nullable();
             $table->timestamps();
         });
