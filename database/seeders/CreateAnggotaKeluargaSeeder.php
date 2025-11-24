@@ -17,21 +17,19 @@ class CreateAnggotaKeluargaSeeder extends Seeder
         $kk_ids = KeluargaKK::pluck('kk_id')->toArray();
         $warga_ids = Warga::pluck('warga_id')->toArray();
 
-        if (count($kk_ids) === 0 || count($warga_ids) === 0) {
-            $this->command->warn('⚠ Data tidak cukup! Seeder dihentikan.');
+        if (empty($kk_ids) || empty($warga_ids)) {
+            $this->command->warn('⚠ Data tidak cukup! Seeder AnggotaKeluarga dihentikan.');
             return;
         }
 
-        foreach ($kk_ids as $kk_id) {
-            foreach (range(1, rand(2, 5)) as $i) {
-                AnggotaKeluarga::create([
-                    'kk_id' => $kk_id,
-                    'warga_id' => $faker->randomElement($warga_ids),
-                    'hubungan' => $faker->randomElement(['Ayah','Ibu','Anak','Saudara']),
-                ]);
-            }
+        foreach (range(1, 100) as $i) {
+            AnggotaKeluarga::create([
+                'kk_id'       => $faker->randomElement($kk_ids),
+                'warga_id'    => $faker->randomElement($warga_ids),
+                'hubungan'    => $faker->randomElement(['Ayah','Ibu','Anak','Saudara']),
+            ]);
         }
 
-        $this->command->info('✔ Anggota keluarga berhasil dibuat!');
+        $this->command->info('✔ 100 Data Anggota Keluarga berhasil dibuat.');
     }
 }

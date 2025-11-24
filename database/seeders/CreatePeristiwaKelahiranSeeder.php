@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use App\Models\PeristiwaKelahiran;
 use App\Models\Warga;
-use Illuminate\Support\Facades\DB;
 
 class CreatePeristiwaKelahiranSeeder extends Seeder
 {
@@ -14,51 +13,40 @@ class CreatePeristiwaKelahiranSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        // Kosongkan tabel peristiwa kelahiran
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        PeristiwaKelahiran::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $ayahList = Warga::where('jenis_kelamin', 'Laki-Laki')->pluck('warga_id')->toArray();
+        $ibuList  = Warga::where('jenis_kelamin', 'Perempuan')->pluck('warga_id')->toArray();
 
-        // Ambil seluruh warga
-        $warga = Warga::get();
-
-        if ($warga->count() < 2) {
-            $this->command->error('❌ Data warga tidak cukup untuk membuat peristiwa kelahiran.');
+        if (empty($ayahList) || empty($ibuList)) {
+            $this->command->warn('⚠ Tidak ditemukan data ayah/ibu! Seeder dihentikan.');
             return;
         }
 
-        foreach (range(1, 10) as $i) {
+        foreach (range(1, 100) as $i) {
 
-            $ayah = Warga::where('jenis_kelamin', 'Laki-Laki')->inRandomOrder()->first();
-            $ibu  = Warga::where('jenis_kelamin', 'Perempuan')->inRandomOrder()->first();
+            $ayah_id = $faker->randomElement($ayahList);
+            $ibu_id  = $faker->randomElement($ibuList);
 
-            if (!$ayah || !$ibu) {
-                $this->command->warn('⚠ Ayah atau Ibu tidak ditemukan. Melewati 1 data.');
-                continue;
-            }
-
-            // Buat bayi baru
+            // Buat bayi (otomatis masuk ke tabel warga)
             $bayi = Warga::create([
-                'no_ktp'        => $faker->unique()->numerify('3273############'),
-                'nama'          => $faker->firstName . ' ' . $ayah->nama,
+                'no_ktp'        => $faker->unique()->numerify('3301############'),
+                'nama'          => $faker->firstName . ' ' . Warga::find($ayah_id)->nama,
                 'jenis_kelamin' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-                'agama'         => $ayah->agama,
+                'agama'         => Warga::find($ayah_id)->agama,
                 'pekerjaan'     => null,
                 'telp'          => null,
                 'email'         => null,
             ]);
 
-            // Masukkan data kelahiran
             PeristiwaKelahiran::create([
                 'warga_id'      => $bayi->warga_id,
                 'tgl_lahir'     => $faker->date(),
                 'tempat_lahir'  => $faker->city,
-                'ayah_warga_id' => $ayah->warga_id,
-                'ibu_warga_id'  => $ibu->warga_id,
-                'no_akta'       => $faker->unique()->numerify('AKTA-#####'),
+                'ayah_warga_id' => $ayah_id,
+                'ibu_warga_id'  => $ibu_id,
+                'no_akta'       => $faker->unique()->numerify('AKTA-########'),
             ]);
         }
 
-        $this->command->info('✔️ 10 Data Peristiwa Kelahiran berhasil dibuat.');
+        $this->command->info('✔ 100 Data Peristiwa Kelahiran berhasil dibuat.');
     }
 }

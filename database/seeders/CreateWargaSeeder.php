@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\Warga;
@@ -11,18 +12,18 @@ class CreateWargaSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        foreach (range(1, 50) as $i) {
+        foreach (range(1, 100) as $i) {
             Warga::create([
-                'no_ktp'        => $faker->unique()->numerify('3273############'),
+                'no_ktp'        => $faker->unique()->numerify('32##############'),
                 'nama'          => $faker->name,
                 'jenis_kelamin' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
                 'agama'         => $faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha']),
                 'pekerjaan'     => $faker->jobTitle,
-                'telp'          => $faker->numerify('08##########'), // FIX
+                'telp'          => $faker->numerify('08##########'),
                 'email'         => $faker->optional()->safeEmail,
             ]);
         }
 
-        $this->command->info('✔️ 50 Data Warga berhasil dibuat.');
+        $this->command->info('✔ 100 Data Warga berhasil dibuat.');
     }
 }
