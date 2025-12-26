@@ -36,11 +36,8 @@ Route::get('/logout', function (\Illuminate\Http\Request $request) {
 Route::get('/register', [LoginController::class, 'registerForm'])->name('register.index');
 Route::post('/register', [LoginController::class, 'register'])->name('register.process');
 
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD → TIDAK BUTUH LOGIN
-|--------------------------------------------------------------------------
-*/
+
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 /*
