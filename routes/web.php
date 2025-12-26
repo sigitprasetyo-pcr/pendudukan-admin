@@ -12,11 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| DEFAULT ROUTE → LANGSUNG KE DASHBOARD
-|--------------------------------------------------------------------------
-*/
+
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
