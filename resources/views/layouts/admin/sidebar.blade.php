@@ -78,39 +78,32 @@
                     </li>
 
                     {{-- KELUARGA KK --}}
+                    {{-- KELUARGA KK --}}
                     <li class="sidebar-item">
-                        <a class="sidebar-link primary-hover-bg justify-content-between has-arrow"
-                            href="javascript:void(0)">
-                            <div class="d-flex align-items-center gap-6">
-                                <span class="d-flex">
-                                    <iconify-icon icon="solar:home-angle-line-duotone"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">Keluarga KK</span>
-                            </div>
+                        <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                            aria-expanded="false">
+                            <iconify-icon icon="solar:home-angle-line-duotone"></iconify-icon>
+                            <span class="hide-menu">Keluarga KK</span>
                         </a>
 
-                        <ul aria-expanded="false" class="collapse first-level">
+                        <ul class="collapse first-level" aria-expanded="false">
                             <li class="sidebar-item">
-                                <a class="sidebar-link primary-hover-bg justify-content-between"
-                                    href="{{ route('keluarga_kk.index') }}">
-                                    <div class="d-flex align-items-center gap-6">
-                                        <span class="d-flex"><span class="icon-small"></span></span>
-                                        <span class="hide-menu">Data Kepala KK</span>
-                                    </div>
+                                <a href="{{ route('keluarga_kk.index') }}" class="sidebar-link primary-hover-bg">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">Data Kepala KK</span>
                                 </a>
                             </li>
 
                             <li class="sidebar-item">
-                                <a class="sidebar-link primary-hover-bg justify-content-between"
-                                    href="{{ route('anggota_keluarga.index') }}">
-                                    <div class="d-flex align-items-center gap-6">
-                                        <span class="d-flex"><span class="icon-small"></span></span>
-                                        <span class="hide-menu">Anggota Keluarga</span>
-                                    </div>
+                                <a href="{{ route('anggota_keluarga.index') }}" class="sidebar-link primary-hover-bg">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">Anggota Keluarga</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
+
+
 
                     {{-- KELAHIRAN --}}
                     <li class="sidebar-item">

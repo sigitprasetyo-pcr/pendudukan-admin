@@ -42,7 +42,7 @@
         {{-- HEADER --}}
         <div class="mb-4">
             <<h3 class="fw-bold">
-                👋 Selamat Datang, {{ session('user_name') ?? 'Pengguna' }}!
+                Selamat Datang, {{ session('user_name') ?? 'Pengguna' }}!
                 </h3>
 
                 <p class="text-muted mb-0">Ringkasan informasi kependudukan terbaru.</p>
@@ -246,9 +246,16 @@
                     <p class="mb-3 text-muted">Sistem Informasi</p>
 
                     <div class="d-flex justify-content-center gap-4 fs-3">
-                        <a href="#" class="text-primary"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="text-dark"><i class="fab fa-github"></i></a>
-                        <a href="#" class="text-danger"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/sigitprasetyo-sigitprasetyo-b9a296332" class="text-primary">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/sigitprasetyo-pcr" class="text-dark">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.instagram.com/sigitprasetyo-pcr" class="text-danger">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+
                     </div>
 
                 </div>
